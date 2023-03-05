@@ -1,17 +1,27 @@
-require("mason").setup()
-
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "jdtls", "bashls","pyright" }
+  ensure_installed = { "lua_ls", "jdtls", "bashls","pyright", "marksman" },
+  automatic_installation = true,
 })
 
 
-require("lspconfig").lua_ls.setup {}
+require('lspconfig').lua_ls.setup {
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+    },
+  },
+}
+
+
 require("lspconfig").jdtls.setup {}
 require("lspconfig").bashls.setup {}
-
+require("lspconfig").pyright.setup {}
+require("lspconfig").marksman.setup {}
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
 
 require('lspsaga').setup({
   code_action_icon = "💡",
