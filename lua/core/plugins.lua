@@ -64,6 +64,12 @@ return require('packer').startup(function(use)
         }
     }
 
+
+    use {
+      'nvim-lualine/lualine.nvim',
+      requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    }
+
     use {"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "glepnir/lspsaga.nvim"}
 
     -- Automatically set up your configuration after cloning packer.nvim
