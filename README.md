@@ -4,4 +4,4 @@ https://github.com/neovim/neovim/wiki/FAQ#how-to-use-the-windows-clipboard-from-
 
 ## TODO
 
-- [ ] Вкладки 
+- [X] Вкладки 

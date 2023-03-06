@@ -27,6 +27,10 @@ return require('packer').startup(function(use)
     -- use 'preservim/vimux'
     -- use 'christoomey/vim-tmux-navigator'
     -- use 'tpope/vim-fugitive'
+   
+
+    use 'nvim-tree/nvim-web-devicons'
+    use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
 
     -- completion
 
