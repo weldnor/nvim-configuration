@@ -14,32 +14,17 @@ end
 local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
+    -- packet manager
     use 'wbthomason/packer.nvim'
     
-
     -- themes
     use 'ellisonleao/gruvbox.nvim'    
     use 'folke/tokyonight.nvim'
 
-
-    -- use 'dracula/vim'
-    -- use 'nvim-tree/nvim-tree.lua'
-    -- use 'nvim-tree/nvim-web-devicons'
-    -- use 'nvim-lualine/lualine.nvim'
+    -- highlighting 
     use 'nvim-treesitter/nvim-treesitter'
-    -- use 'bluz71/vim-nightfly-colors'
-    -- use 'vim-test/vim-test'
-    -- use 'lewis6991/gitsigns.nvim'
-    -- use 'preservim/vimux'
-    -- use 'christoomey/vim-tmux-navigator'
-    -- use 'tpope/vim-fugitive'
-   
-
-    use 'nvim-tree/nvim-web-devicons'
-    use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
 
     -- completion
-
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'L3MON4D3/LuaSnip'
@@ -48,22 +33,15 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-emoji'
 
+    use 'jose-elias-alvarez/null-ls.nvim'
 
-    use {
-        "ellisonleao/glow.nvim",
-        config = function()
-            require("glow").setup()
-        end
-    }
+    -- lsp support
+    use {"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "glepnir/lspsaga.nvim"}
 
-    use 'tjdevries/colorbuddy.nvim'
-    use 'bkegley/gloombuddy'
-    use {
-        'nvim-telescope/telescope.nvim',
-        tag = '0.1.1',
-        requires = {{'nvim-lua/plenary.nvim'}}
-    }
+    -- search
+    use {'nvim-telescope/telescope.nvim', requires = 'nvim-lua/plenary.nvim'}
 
+    -- markdown preview
     use({
         "iamcco/markdown-preview.nvim",
         run = function()
@@ -71,19 +49,14 @@ return require('packer').startup(function(use)
         end
     })
 
-    use {
-        'nvim-tree/nvim-tree.lua',
-        requires = {'nvim-tree/nvim-web-devicons' -- optional, for file icons
-        }
-    }
+    -- file explorer
+    use {'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons'}
 
+    -- status bar 
+    use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true }}
 
-    use {
-      'nvim-lualine/lualine.nvim',
-      requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
-
-    use {"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim", "neovim/nvim-lspconfig", "glepnir/lspsaga.nvim"}
+    -- tabs
+    use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins

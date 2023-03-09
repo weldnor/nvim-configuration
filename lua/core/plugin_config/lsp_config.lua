@@ -1,5 +1,5 @@
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "jdtls", "bashls","pyright", "marksman" },
+  ensure_installed = { "lua_ls", "jdtls", "bashls","pyright" },
   automatic_installation = true,
 })
 
@@ -15,7 +15,6 @@ require('lspconfig').lua_ls.setup {
   },
 }
 
-
 require("lspconfig").jdtls.setup {}
 require("lspconfig").bashls.setup {}
 require("lspconfig").pyright.setup {}
@@ -23,12 +22,26 @@ require("lspconfig").marksman.setup {}
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+
+
+
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.prettier,
+  },
+})
+
+
+
+
 require('lspsaga').setup({
   code_action_icon = "💡",
   symbol_in_winbar = {
     in_custom = false,
     enable = true,
-    separator = ' ',
+    separator = ' ',
     show_file = true,
     file_formatter = ""
   },
@@ -40,7 +53,7 @@ local keymap = vim.keymap.set
 keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>")
 
 -- Code action
-keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>")
+keymap({"n","v"}, "ga", "<cmd>Lspsaga code_action<CR>")
 
 -- Rename all occurrences of the hovered word for the entire file
 keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
