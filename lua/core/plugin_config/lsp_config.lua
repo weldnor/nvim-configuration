@@ -1,133 +1,42 @@
-require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "jdtls", "bashls","pyright" },
-  automatic_installation = true,
+require("mason").setup()
+
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
+local cmp = require('cmp')
 
-require('lspconfig').lua_ls.setup {
-  settings = {
-    Lua = {
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-    },
-  },
-}
+lsp.setup_nvim_cmp({
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  })
+})
 
-require("lspconfig").jdtls.setup {}
-require("lspconfig").bashls.setup {}
-require("lspconfig").pyright.setup {}
-require("lspconfig").marksman.setup {}
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-
+-- (Optional) Configure lua language server for neovim
+lsp.nvim_workspace()
+lsp.setup()
 
 
 local null_ls = require("null-ls")
 
-null_ls.setup({
+require("null-ls").setup({
   sources = {
+    null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.prettier,
-  },
+    null_ls.builtins.formatting.autopep8,
+  }
+})
+require("mason-null-ls").setup({
+  ensure_installed = nil,
+  automatic_installation = true,
+  automatic_setup = false,
 })
 
-
-
-
-require('lspsaga').setup({
-  code_action_icon = "💡",
-  symbol_in_winbar = {
-    in_custom = false,
-    enable = true,
-    separator = ' ',
-    show_file = true,
-    file_formatter = ""
-  },
-})
-
-local keymap = vim.keymap.set
-
-
-keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>")
-
--- Code action
-keymap({"n","v"}, "ga", "<cmd>Lspsaga code_action<CR>")
-
--- Rename all occurrences of the hovered word for the entire file
-keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
-
--- Rename all occurrences of the hovered word for the selected files
-keymap("n", "gr", "<cmd>Lspsaga rename ++project<CR>")
-
--- Peek definition
--- You can edit the file containing the definition in the floating window
--- It also supports open/vsplit/etc operations, do refer to "definition_action_keys"
--- It also supports tagstack
--- Use <C-t> to jump back
-keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>")
-
--- Go to definition
-keymap("n","gd", "<cmd>Lspsaga goto_definition<CR>")
-
--- Peek type definition
--- You can edit the file containing the type definition in the floating window
--- It also supports open/vsplit/etc operations, do refer to "definition_action_keys"
--- It also supports tagstack
--- Use <C-t> to jump back
-keymap("n", "gt", "<cmd>Lspsaga peek_type_definition<CR>")
-
--- Go to type definition
-keymap("n","gt", "<cmd>Lspsaga goto_type_definition<CR>")
-
-
--- Show line diagnostics
--- You can pass argument ++unfocus to
--- unfocus the show_line_diagnostics floating window
-keymap("n", "<leader>sl", "<cmd>Lspsaga show_line_diagnostics<CR>")
-
--- Show cursor diagnostics
--- Like show_line_diagnostics, it supports passing the ++unfocus argument
-keymap("n", "<leader>sc", "<cmd>Lspsaga show_cursor_diagnostics<CR>")
-
--- Show buffer diagnostics
-keymap("n", "<leader>sb", "<cmd>Lspsaga show_buf_diagnostics<CR>")
-
--- Diagnostic jump
--- You can use <C-o> to jump back to your previous location
-keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
-keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>")
-
--- Diagnostic jump with filters such as only jumping to an error
-keymap("n", "[E", function()
-  require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
-end)
-keymap("n", "]E", function()
-  require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
-end)
-
--- Toggle outline
-keymap("n","<leader>o", "<cmd>Lspsaga outline<CR>")
-
--- Hover Doc
--- If there is no hover doc,
--- there will be a notification stating that
--- there is no information available.
--- To disable it just use ":Lspsaga hover_doc ++quiet"
--- Pressing the key twice will enter the hover window
-keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
-
--- If you want to keep the hover window in the top right hand corner,
--- you can pass the ++keep argument
--- Note that if you use hover with ++keep, pressing this key again will
--- close the hover window. If you want to jump to the hover window
--- you should use the wincmd command "<C-w>w"
-keymap("n", "K", "<cmd>Lspsaga hover_doc ++keep<CR>")
-
--- Call hierarchy
-keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>")
-keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>")
-
--- Floating terminal
-keymap({"n", "t"}, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
+-- keymaps
+vim.cmd('map <Leader>lf :lua vim.lsp.buf.format({timeout_ms =  2000})<CR>')
